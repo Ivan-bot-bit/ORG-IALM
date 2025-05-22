@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organización IALM - Cursos de Brigadas de Emergencia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Light gray background */
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ef4444; /* Red */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #dc2626; /* Darker red */
+        }
+        .btn-primary {
+            @apply bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105;
+        }
+        .btn-secondary {
+            @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105;
+        }
+        .input-field {
+            /* Enhanced focus and hover styles for a more attractive form */
+            @apply w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-red-300 focus:border-red-600 transition duration-200 ease-in-out shadow-sm hover:shadow-md;
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            display: flex; /* Use flexbox for centering */
+            align-items: center; /* Center vertically */
+            justify-content: center; /* Center horizontally */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 90%; /* Responsive width */
+            max-width: 500px; /* Max width */
+            text-align: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-red-700 text-white py-6 shadow-lg">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between px-6">
+            <div class="flex items-center mb-4 md:mb-0">
+                <img id="logo" src="https://placehold.co/100x100/ffffff/ff0000?text=IALM" alt="Logo de IALM" class="w-24 h-24 rounded-full mr-4 border-4 border-white">
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">Organización IALM</h1>
+            </div>
+            <nav>
+                <ul class="flex flex-wrap justify-center md:justify-end space-x-6">
+                    <li><a href="#about" class="hover:text-red-200 text-lg font-medium transition duration-300">Nosotros</a></li>
+                    <li><a href="#courses" class="hover:text-red-200 text-lg font-medium transition duration-300">Cursos</a></li>
+                    <li><a href="#enrollment" class="hover:text-red-200 text-lg font-medium transition duration-300">Inscripción</a></li>
+                    <li><a href="#contact" class="hover:text-red-200 text-lg font-medium transition duration-300">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto py-12 px-6">
+
+        <section id="about" class="bg-white p-8 rounded-lg shadow-xl mb-12">
+            <h2 class="text-4xl font-bold text-red-600 mb-6 text-center">Acerca de Nosotros</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-6 bg-gray-50 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-3 flex items-center"><i class="fas fa-bullseye text-red-500 mr-3"></i>Misión</h3>
+                    <p class="text-gray-700 leading-relaxed">Capacitar y formar brigadas de emergencia altamente competentes y preparadas para responder eficazmente ante cualquier situación de crisis, salvaguardando vidas y bienes.</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-3 flex items-center"><i class="fas fa-eye text-red-500 mr-3"></i>Visión</h3>
+                    <p class="text-gray-700 leading-relaxed">Ser la organización líder a nivel nacional en la formación de brigadas de emergencia, reconocida por la excelencia de sus programas y el impacto positivo en la seguridad de las comunidades.</p>
+                </div>
+                <div class="p-6 bg-gray-50 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-3 flex items-center"><i class="fas fa-hand-holding-heart text-red-500 mr-3"></i>Valores</h3>
+                    <ul class="list-disc list-inside text-gray-700 leading-relaxed">
+                        <li><strong>Compromiso:</strong> Con la seguridad y el bienestar.</li>
+                        <li><strong>Excelencia:</strong> En la enseñanza y capacitación.</li>
+                        <li><strong>Integridad:</strong> Actuando con ética y transparencia.</li>
+                        <li><strong>Solidaridad:</strong> Apoyando a quienes más lo necesitan.</li>
+                        <li><strong>Innovación:</strong> En métodos y herramientas de capacitación.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="courses" class="bg-white p-8 rounded-lg shadow-xl mb-12">
+            <h2 class="text-4xl font-bold text-red-600 mb-6 text-center">Nuestros Cursos</h2>
+            <div class="p-6 bg-gray-50 rounded-lg shadow-md">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-3 flex items-center"><i class="fas fa-graduation-cap text-red-500 mr-3"></i>Objetivo del Curso</h3>
+                <p class="text-gray-700 leading-relaxed">Proporcionar a los participantes los conocimientos teóricos y prácticos esenciales para conformar y operar brigadas de emergencia eficientes, capaces de prevenir, mitigar y responder ante diversas contingencias, minimizando riesgos y protegiendo vidas.</p>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-red-100 p-4 rounded-lg flex items-center justify-center text-red-800 font-medium text-lg shadow-sm">
+                        <i class="fas fa-fire-extinguisher mr-2"></i> Brigada de Emergencias
+                    </div>
+                    <div class="bg-red-100 p-4 rounded-lg flex items-center justify-center text-red-800 font-medium text-lg shadow-sm">
+                        <i class="fas fa-first-aid mr-2"></i> Primeros Auxilios
+                    </div>
+                    <div class="bg-red-100 p-4 rounded-lg flex items-center justify-center text-red-800 font-medium text-lg shadow-sm">
+                        <i class="fas fa-burn mr-2"></i> Combate Contra Incendios
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="enrollment" class="bg-white p-8 rounded-lg shadow-xl mb-12">
+            <h2 class="text-4xl font-bold text-red-600 mb-6 text-center">Formulario de Inscripción</h2>
+
+            <form id="enrollmentForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="name" class="block text-gray-700 text-lg font-bold mb-2">Nombre Completo</label>
+                    <input type="text" id="name" name="name" class="input-field" required>
+                </div>
+
+                <div>
+                    <label for="dob" class="block text-gray-700 text-lg font-bold mb-2">Fecha de Nacimiento</label>
+                    <input type="date" id="dob" name="dob" class="input-field" required>
+                </div>
+
+                <div>
+                    <label for="course" class="block text-gray-700 text-lg font-bold mb-2">Selecciona el Curso</label>
+                    <select id="course" name="course" class="input-field" required>
+                        <option value="">-- Selecciona un curso --</option>
+                        <option value="Brigada de Emergencias">Brigada de Emergencias</option>
+                        <option value="Primeros Auxilios">Primeros Auxilios</option>
+                        <option value="Combate Contra Incendios">Combate Contra Incendios</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="modality" class="block text-gray-700 text-lg font-bold mb-2">Modalidad del Curso</label>
+                    <select id="modality" name="modality" class="input-field" required>
+                        <option value="">-- Selecciona modalidad --</option>
+                        <option value="Presencial">Presencial</option>
+                        <option value="Virtual">Virtual</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="phone" class="block text-gray-700 text-lg font-bold mb-2">Teléfono (10 dígitos)</label>
+                    <input type="tel" id="phone" name="phone" class="input-field" maxlength="10" pattern="[0-9]{10}" title="Por favor, ingresa 10 dígitos numéricos" required>
+                </div>
+
+                <div>
+                    <label for="email" class="block text-gray-700 text-lg font-bold mb-2">E-mail</label>
+                    <input type="email" id="email" name="email" class="input-field" required>
+                </div>
+
+                <div>
+                    <label for="city" class="block text-gray-700 text-lg font-bold mb-2">Ciudad</label>
+                    <input type="text" id="city" name="city" class="input-field" required>
+                </div>
+
+                <div>
+                    <label for="state" class="block text-gray-700 text-lg font-bold mb-2">Estado</label>
+                    <select id="state" name="state" class="input-field" required>
+                        <option value="">-- Selecciona un estado --</option>
+                        </select>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label for="comments" class="block text-gray-700 text-lg font-bold mb-2">Comentarios</label>
+                    <textarea id="comments" name="comments" rows="4" class="input-field"></textarea>
+                </div>
+
+                <div class="md:col-span-2 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 mt-6">
+                    <button type="submit" class="btn-primary flex items-center justify-center">
+                        <i class="fas fa-user-plus mr-2"></i> Generar Inscripción
+                    </button>
+                    <button type="button" id="exportPdfBtn" class="btn-secondary flex items-center justify-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Exportar Recibo (PDF)
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <div id="messageModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="closeModalBtn">&times;</span>
+                <p id="modalMessage" class="text-xl font-semibold mb-4"></p>
+                <button type="button" class="btn-primary" id="modalOkBtn">Aceptar</button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer id="contact" class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto flex flex-col md:flex-row items-center justify-between px-6">
+            <p class="text-center md:text-left mb-4 md:mb-0">&copy; 2023 Organización IALM. Todos los derechos reservados.</p>
+            <div class="flex space-x-6 text-2xl">
+                <a href="https://www.facebook.com/yourpage" target="_blank" class="hover:text-red-500 transition duration-300" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/yourpage" target="_blank" class="hover:text-red-500 transition duration-300" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@yourpage" target="_blank" class="hover:text-red-500 transition duration-300" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="https://www.linkedin.com/company/yourcompany" target="_blank" class="hover:text-red-500 transition duration-300" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://wa.me/521234567890" target="_blank" class="hover:text-green-500 transition duration-300" aria-label="WhatsApp">
+                    <i class="fab fa-whatsapp text-green-400 hover:text-green-500"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Function to set the logo source from a GitHub link
+        function setLogoFromGithub(githubLink) {
+            const logoElement = document.getElementById('logo');
+            if (logoElement) {
+                // Example: If your GitHub link is a direct image URL like 'https://raw.githubusercontent.com/user/repo/main/logo.png'
+                logoElement.src = githubLink;
+            }
+        }
+
+        // Call this function with your actual GitHub image link
+        // setLogoFromGithub('YOUR_GITHUB_LOGO_LINK_HERE');
+        // For demonstration, keeping the placeholder.
+
+        // List of Mexican States
+        const mexicanStates = [
+            "Aguascalientes", "Baja California", "Baja California Sur", "Campeche", "Chiapas", "Chihuahua",
+            "Coahuila de Zaragoza", "Colima", "Ciudad de México", "Durango", "Guanajuato", "Guerrero",
+            "Hidalgo", "Jalisco", "México", "Michoacán de Ocampo", "Morelos", "Nayarit", "Nuevo León",
+            "Oaxaca", "Puebla", "Querétaro", "Quintana Roo", "San Luis Potosí", "Sinaloa", "Sonora",
+            "Tabasco", "Tamaulipas", "Tlaxcala", "Veracruz de Ignacio de la Llave", "Yucatán", "Zacatecas"
+        ];
+
+        // Populate the states dropdown
+        const stateSelect = document.getElementById('state');
+        mexicanStates.forEach(state => {
+            const option = document.createElement('option');
+            option.value = state;
+            option.textContent = state;
+            stateSelect.appendChild(option);
+        });
+
+        const enrollmentForm = document.getElementById('enrollmentForm');
+        const messageModal = document.getElementById('messageModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalOkBtn = document.getElementById('modalOkBtn');
+        const exportPdfBtn = document.getElementById('exportPdfBtn');
+
+        // Function to show the modal message
+        function showModal(message, isSuccess = true) {
+            modalMessage.textContent = message;
+            modalMessage.className = isSuccess ? 'text-green-600 text-xl font-semibold mb-4' : 'text-red-600 text-xl font-semibold mb-4';
+            messageModal.style.display = 'flex'; // Show modal
+        }
+
+        // Function to hide the modal message
+        function hideModal() {
+            messageModal.style.display = 'none';
+        }
+
+        // Event listeners for modal close buttons
+        closeModalBtn.addEventListener('click', hideModal);
+        modalOkBtn.addEventListener('click', hideModal);
+        // Close modal if clicked outside of content
+        window.addEventListener('click', (event) => {
+            if (event.target == messageModal) {
+                hideModal();
+            }
+        });
+
+        // Form submission handler
+        enrollmentForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Get form data
+            const formData = {
+                name: document.getElementById('name').value,
+                dob: document.getElementById('dob').value,
+                course: document.getElementById('course').value,
+                modality: document.getElementById('modality').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                comments: document.getElementById('comments').value
+            };
+
+            // Basic phone number validation (already handled by pattern and maxlength, but good to double check)
+            if (formData.phone.length !== 10 || !/^\d{10}$/.test(formData.phone)) {
+                showModal("Error: El número de teléfono debe tener exactamente 10 dígitos.", false);
+                return;
+            }
+
+            // Simulate successful inscription
+            console.log("Datos de inscripción:", formData);
+            showModal("¡SE ha inscrito correctamente!");
+
+            // Clear the form after successful submission
+            enrollmentForm.reset();
+        });
+
+        // PDF Export Handler
+        exportPdfBtn.addEventListener('click', function() {
+            const formElements = enrollmentForm.elements;
+            let receiptContent = "Recibo de Inscripción - Organización IALM\n\n";
+
+            // Collect data for PDF
+            receiptContent += `Nombre: ${formElements.name.value}\n`;
+            receiptContent += `Fecha de Nacimiento: ${formElements.dob.value}\n`;
+            receiptContent += `Curso Seleccionado: ${formElements.course.value}\n`;
+            receiptContent += `Modalidad: ${formElements.modality.value}\n`;
+            receiptContent += `Teléfono: ${formElements.phone.value}\n`;
+            receiptContent += `E-mail: ${formElements.email.value}\n`;
+            receiptContent += `Ciudad: ${formElements.city.value}\n`;
+            receiptContent += `Estado: ${formElements.state.value}\n`;
+            receiptContent += `Comentarios: ${formElements.comments.value || 'N/A'}\n\n`;
+            receiptContent += "¡Gracias por inscribirte!";
+
+            // Check if jsPDF is loaded
+            if (typeof window.jspdf === 'undefined' || typeof window.html2canvas === 'undefined') {
+                showModal("Error: Las librerías para PDF no se han cargado correctamente. Por favor, intente de nuevo más tarde.", false);
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Add content to PDF
+            doc.setFontSize(16);
+            doc.text(receiptContent, 10, 10);
+
+            // Save the PDF
+            doc.save('Recibo_Inscripcion_IALM.pdf');
+
+            showModal("Recibo PDF generado correctamente.");
+        });
+    </script>
+</body>
+</html>
